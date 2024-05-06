@@ -1,5 +1,8 @@
-#[derive(Clone, Debug)]
+use crate::constants::*;
+use core::slice::SlicePattern;
+use std::rc::Rc;
 
+#[derive(Clone, Debug)]
 pub enum State {
     Start,
     Scan,
@@ -13,19 +16,19 @@ impl State {
 
 pub struct StateMachine {
     pub state: State,
-    pub offset: i32,
-    pub mindex: i32,
+    pub offset: usize,
+    pub mindex: usize,
     pub buf: String,
 }
 
 pub trait Machine {
     fn state(&self) -> State;
-    fn offset(&self) -> i32;
-    fn mindex(&self) -> i32;
+    fn offset(&self) -> usize;
+    fn mindex(&self) -> usize;
     fn buf(&self) -> String;
     fn new() -> Self;
     fn next(&mut self);
-    fn run(&mut self);
+    fn run(&mut self, data: &[u8]);
 }
 
 impl Machine for StateMachine {
@@ -33,11 +36,11 @@ impl Machine for StateMachine {
         self.state.clone()
     }
 
-    fn offset(&self) -> i32 {
+    fn offset(&self) -> usize {
         self.offset.clone()
     }
 
-    fn mindex(&self) -> i32 {
+    fn mindex(&self) -> usize {
         self.mindex.clone()
     }
 
@@ -62,11 +65,28 @@ impl Machine for StateMachine {
         }
     }
 
-    fn run(&mut self) {
+    fn run(&mut self, data: &[u8]) {
+        let iter = Rc::new(data);
         match self.state {
-            State::Start => {}
-            State::Scan => {}
-            State::MatchFound => {}
+            State::Start => self.next(),
+            State::Scan => {
+                for i in iter.into_iter().clone().enumerate() {
+                    self.offset = i.0;
+                    if ERROR.chars().nth(0) == Some(*i.1 as char) {
+                        self.next();
+                    }
+                }
+            }
+            State::MatchFound => {
+                for i in iter.clone().chunks(ERROR.len()).skip(self.offset()) {
+                    let collection: String = i.into_iter().map(|x| *x as char).collect();
+                    match collection {
+                        ERROR => {
+                            self.mindex = self.offset();
+                        }
+                    }
+                }
+            }
             State::Complete => {}
         }
     }

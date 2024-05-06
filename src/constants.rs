@@ -5,6 +5,9 @@ pub enum Keys {
     Time(String),
 }
 
+pub const ERROR: &'static str = "Error";
+pub const WARNING: &'static str = "Warning";
+
 pub struct ResultData {}
 
 impl Keys {

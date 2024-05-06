@@ -1,4 +1,6 @@
+mod constants;
 mod statemachine;
+
 use crate::statemachine::*;
 
 fn main() {
