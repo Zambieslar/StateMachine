@@ -55,6 +55,9 @@ impl Machine for StateMachine {
                 State::Start => self.next(),
                 State::Scan => match self.state.1 {
                     SubState::Header => for i in iter.clone().into_iter() {},
+                    SubState::Time => {}
+                    SubState::Date => {}
+                    SubState::Message => {}
                 },
                 State::MatchFound => {}
                 State::Complete => {}
