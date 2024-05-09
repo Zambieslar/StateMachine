@@ -13,15 +13,9 @@ pub enum SubState {
     Message,
 }
 
-pub struct StateMachine {
-    pub state: (State, SubState),
-    pub offset: usize,
-    pub mindex: usize,
-    pub buf: String,
-}
-
+#[derive(Default)]
 pub struct Header {
-    session_id: char,
+    session_id: i32,
     pl_client_version: String,
     release_date: String,
     launch_time: String,
@@ -34,6 +28,16 @@ pub struct Header {
     impersonated_account: String,
     network_credentials: String,
     pl_portmonitor_status: String,
+}
+
+pub struct Error {
+    error: String,
+    error_index: i64,
+    error_digest: [u8],
+}
+
+pub struct DeserializedLog {
+    header: Header,
 }
 
 impl State {

@@ -1,7 +1,5 @@
-use std::iter;
 use std::rc::Rc;
 
-use crate::constants::*;
 use crate::definitions::*;
 
 pub trait Machine {
@@ -12,6 +10,14 @@ pub trait Machine {
     fn new() -> Self;
     fn next(&mut self);
     fn run(&mut self, data: &[u8]);
+}
+
+pub struct StateMachine {
+    pub state: (State, SubState),
+    pub offset: usize,
+    pub mindex: usize,
+    pub line: i32,
+    pub buf: String,
 }
 
 impl Machine for StateMachine {
@@ -36,6 +42,7 @@ impl Machine for StateMachine {
             state: (State::Start, SubState::Header),
             offset: 0,
             mindex: 0,
+            line: 0,
             buf: String::new(),
         }
     }
@@ -54,7 +61,11 @@ impl Machine for StateMachine {
             match self.state.0 {
                 State::Start => self.next(),
                 State::Scan => match self.state.1 {
-                    SubState::Header => for i in iter.clone().into_iter() {},
+                    SubState::Header => {
+                        for i in iter.clone().into_iter().enumerate() {
+                            self.offset = i.0;
+                        }
+                    }
                     SubState::Time => {}
                     SubState::Date => {}
                     SubState::Message => {}

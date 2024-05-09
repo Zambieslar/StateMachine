@@ -7,6 +7,8 @@ pub enum Keys {
 
 pub const ERROR: &'static str = "Error";
 pub const WARNING: &'static str = "Warning";
+pub const NEWLINE: u8 = 10;
+pub const DELIMITER: u8 = 20;
 
 pub struct ResultData {}
 
