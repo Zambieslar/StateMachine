@@ -13,7 +13,7 @@ use crate::statemachine::*;
 
 fn main() {
     let app = Application::builder()
-        .application_id("statemachine")
+        .application_id("com.zambiebam.statemachine")
         .build();
     app.connect_activate(|app| {
         let file_dialog = FileDialog::builder().build();
@@ -22,18 +22,26 @@ fn main() {
             .height_request(400)
             .resizable(false)
             .build();
+        mwindow.present();
         gtk4::glib::spawn_future_local(async move {
             let file = file_dialog.open_future(Some(&mwindow)).await;
             match file {
                 Ok(data) => {
                     if let Ok(data) = data.read(Cancellable::NONE) {
-                        let buf: u8 = Box::new(
+                        let size = data
+                            .query_info(FILE_ATTRIBUTE_STANDARD_SIZE, Cancellable::NONE)
+                            .expect("Unable to read attribute")
+                            .size();
+                        let mut buf = Box::new(Vec::<u8>::new());
+                        data.into_read().bytes().map(|x| buf.push(x.unwrap()));
+                        let mut machine = StateMachine::new();
+                        machine.run(&buf);
                     }
-                    let mut machine = StateMachine::new();
                 }
                 Err(error) => {}
             }
             //            machine.run(&file);
         });
     });
+    app.run();
 }
