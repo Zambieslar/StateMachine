@@ -1,24 +1,6 @@
 use std::rc::Rc;
 
-use crate::definitions::*;
-
-pub trait Machine {
-    fn state(&self) -> State;
-    fn offset(&self) -> usize;
-    fn mindex(&self) -> usize;
-    fn buf(&self) -> String;
-    fn new() -> Self;
-    fn next(&mut self);
-    fn run(&mut self, data: &[u8]);
-}
-
-pub struct StateMachine {
-    pub state: (State, SubState),
-    pub offset: usize,
-    pub mindex: usize,
-    pub line: i32,
-    pub buf: String,
-}
+use crate::{constants::*, definitions::*, traits::*};
 
 impl Machine for StateMachine {
     fn state(&self) -> State {
@@ -51,6 +33,14 @@ impl Machine for StateMachine {
         match self.state() {
             state => {
                 self.state.0 = State::STATES[state as usize + 1].clone();
+            }
+        }
+    }
+
+    fn reverse(&mut self) {
+        match self.state() {
+            state => {
+                self.state.0 = State::STATES[state as usize - 1].clone();
             }
         }
     }

@@ -13,9 +13,21 @@ pub enum SubState {
     Message,
 }
 
-#[derive(Default)]
+pub enum Action {
+    ADD,
+    DELETE,
+}
+
+pub struct StateMachine {
+    pub state: (State, SubState),
+    pub offset: usize,
+    pub mindex: usize,
+    pub line: i32,
+    pub buf: String,
+}
+
 pub struct Header {
-    session_id: i32,
+    session_id: Option<i32>,
     pl_client_version: String,
     release_date: String,
     launch_time: String,
@@ -30,14 +42,44 @@ pub struct Header {
     pl_portmonitor_status: String,
 }
 
+pub struct Info {
+    comp_object: String,
+    cur_user: String,
+    detected_nic: String,
+    adobject: ADObject,
+}
+
+pub struct ADObject {
+    ad_user: String,
+    ad_comp: String,
+    ad_groups: Vec<String>,
+    ad_digest: Option<[u8; 256]>,
+}
+
+pub struct Printer {
+    name: String,
+    driver: String,
+    action: Action,
+    profile: Option<String>,
+    error: Option<Error>,
+}
+
+pub struct Warning {
+    time_stamp: (String, String),
+    warning: String,
+    warning_index: usize,
+    warning_digest: Option<[u8; 256]>,
+}
+
 pub struct Error {
     error: String,
-    error_index: i64,
-    error_digest: [u8],
+    error_index: usize,
+    error_digest: Option<[u8; 256]>,
 }
 
 pub struct DeserializedLog {
     header: Header,
+    info: Info,
 }
 
 impl State {

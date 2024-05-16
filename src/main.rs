@@ -1,6 +1,7 @@
 mod constants;
 mod definitions;
 mod statemachine;
+mod traits;
 
 use std::io::Read;
 
@@ -8,8 +9,9 @@ use gtk4::gio::{Cancellable, FILE_ATTRIBUTE_STANDARD_SIZE};
 use gtk4::ApplicationWindow;
 use gtk4::{prelude::*, Application, FileDialog};
 
-use crate::definitions::*;
 use crate::statemachine::*;
+
+use crate::{constants::*, definitions::*, traits::*};
 
 fn main() {
     let app = Application::builder()
