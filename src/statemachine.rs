@@ -52,15 +52,16 @@ impl Machine for StateMachine {
                 State::Start => self.next(),
                 State::Scan => match self.state.1 {
                     SubState::Header => {
-                        for i in iter.clone().into_iter().enumerate() {
-                            self.offset = i.0;
+                        let mut iter = data.into_iter();
+                        loop {
+                            let byte = iter.next();
                         }
                     }
                     SubState::Time => {}
                     SubState::Date => {}
                     SubState::Message => {}
                 },
-                State::MatchFound => {}
+                State::Match => {}
                 State::Complete => {}
             }
         }

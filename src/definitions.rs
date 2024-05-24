@@ -2,7 +2,7 @@
 pub enum State {
     Start,
     Scan,
-    MatchFound,
+    Match,
     Complete,
 }
 
@@ -11,6 +11,22 @@ pub enum SubState {
     Date,
     Time,
     Message,
+}
+
+pub enum HeadState {
+    SessionId,
+    PlClientVersion,
+    ReleaseDate,
+    LaunchTime,
+    Os,
+    CurrentLicense,
+    Features,
+    HomeURL,
+    InteractiveUser,
+    UserTempPath,
+    Imperonation,
+    NetCreds,
+    PortMonStat,
 }
 
 pub enum Action {
@@ -80,8 +96,4 @@ pub struct Error {
 pub struct DeserializedLog {
     header: Header,
     info: Info,
-}
-
-impl State {
-    pub const STATES: [State; 4] = [Self::Start, Self::Scan, Self::MatchFound, Self::Complete];
 }
