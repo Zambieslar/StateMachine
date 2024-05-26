@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{iter, rc::Rc};
 
 use crate::{constants::*, definitions::*, traits::*};
 
@@ -52,9 +52,20 @@ impl Machine for StateMachine {
                 State::Start => self.next(),
                 State::Scan => match self.state.1 {
                     SubState::Header => {
-                        let mut iter = data.into_iter();
-                        loop {
-                            let byte = iter.next();
+                        let iter = data.into_iter();
+                        for byte in iter.enumerate() {
+                            match *byte.1 {
+                                DELIMITER => {
+                                    let token = self.buf.chars().as_str();
+                                    match token {
+                                        _ => {}
+                                    }
+                                }
+                                NEWLINE => {
+                                    self.line = self.line + 1;
+                                }
+                                _ => self.buf.push(*byte.1 as char),
+                            }
                         }
                     }
                     SubState::Time => {}
