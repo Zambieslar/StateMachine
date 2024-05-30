@@ -21,7 +21,7 @@ impl Machine for StateMachine {
 
     fn new() -> Self {
         Self {
-            state: (State::Start, SubState::Header),
+            state: (State::Start, SubState::Header, HeadState::SessionId),
             offset: 0,
             mindex: 0,
             line: 0,
@@ -41,6 +41,15 @@ impl Machine for StateMachine {
         match self.state() {
             state => {
                 self.state.0 = State::STATES[state as usize - 1].clone();
+            }
+        }
+    }
+
+    fn evaluate(comparator: String, key: Option<String>) {
+        for key in Keys::KEYS {
+            match matches!(comparator.clone(), key) {
+                true => {}
+                false => {}
             }
         }
     }

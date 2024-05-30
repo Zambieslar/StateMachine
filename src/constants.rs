@@ -2,29 +2,17 @@ use std::mem::size_of_val;
 
 use crate::{definitions::*, statemachine::*};
 
-pub enum Keys {
-    Error(String),
-    Warning(String),
-    Date(String),
-    Time(String),
-}
+pub enum Keys {}
 
-pub const ERROR: &'static str = "Error";
-pub const WARNING: &'static str = "Warning";
 pub const NEWLINE: u8 = 10; // Tracking each line using byte value of new line
 pub const DELIMITER: u8 = 20; // Delimiting each token using byte value for space
 
 pub struct ResultData {}
 
 impl Keys {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            Keys::Error(_) => "Error",
-            Keys::Warning(_) => "Warning",
-            Keys::Date(_) => "Date",
-            Keys::Time(_) => "Time",
-        }
-    }
+    pub const KEYS: [&'static str; 7] = [
+        "Error", "Warning", "Can't", "Failed", "Unable", "Failure", "Unknown",
+    ];
 }
 
 impl State {

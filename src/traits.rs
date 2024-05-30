@@ -9,8 +9,5 @@ pub trait Machine {
     fn next(&mut self);
     fn reverse(&mut self);
     fn run(&mut self, data: &[u8]);
-}
-
-pub trait New {
-    fn new() -> Self;
+    fn evaluate(comparator: String, key: Option<String>);
 }

@@ -35,13 +35,14 @@ pub enum Action {
 }
 
 pub struct StateMachine {
-    pub state: (State, SubState),
+    pub state: (State, SubState, HeadState),
     pub offset: usize,
     pub mindex: usize,
     pub line: i32,
     pub buf: String,
 }
 
+#[derive(Default)]
 pub struct Header {
     session_id: Option<i32>,
     pl_client_version: String,
